@@ -1,6 +1,7 @@
 import * as React from "react";
+import { getTodaysDayName, getTodaysMonthName } from "../services/dates";
 
-interface DateProps {
+export interface DateProps {
 	dayNum: number;
 	dayName: string;
 	date: number;
@@ -12,40 +13,42 @@ interface DateProps {
 interface ContextProps {
 	dateInView: DateProps;
 	setDateInView: (dateInView: DateProps) => void;
-	loadTodaysDate: () => void;
+	loadTodaysDate: () => DateProps;
 }
-
-const getDayName = (locale: string) => {
-	let date = new Date();
-	return date.toLocaleDateString(locale, { weekday: "long" });
-};
-
-const getMonthName = (locale: string) => {
-	let date = new Date();
-	return date.toLocaleDateString(locale, { month: "long" });
-};
 
 export const DatesContext = React.createContext<ContextProps>({
 	dateInView: {
 		dayNum: new Date().getDay(),
-		dayName: getDayName("en-AU"),
+		dayName: getTodaysDayName("en-AU"),
 		date: new Date().getDate(),
 		monthNum: new Date().getMonth() + 1,
-		monthName: getMonthName("en-AU"),
+		monthName: getTodaysMonthName("en-AU"),
 		year: new Date().getFullYear(),
 	},
 	setDateInView: () => null,
-	loadTodaysDate: () => {},
+	loadTodaysDate: () => {
+		console.log("triggered in context");
+		let today: DateProps = {
+			dayNum: new Date().getDay(),
+			dayName: getTodaysDayName("en-AU"),
+			date: new Date().getDate(),
+			monthNum: new Date().getMonth() + 1,
+			monthName: getTodaysMonthName("en-AU"),
+			year: new Date().getFullYear(),
+		};
+		return today;
+	},
 });
 
 const DatesProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const loadTodaysDate = () => {
+		console.log("triggered inside provider");
 		let today: DateProps = {
 			dayNum: new Date().getDay(),
-			dayName: getDayName("en-AU"),
+			dayName: getTodaysDayName("en-AU"),
 			date: new Date().getDate(),
 			monthNum: new Date().getMonth() + 1,
-			monthName: getMonthName("en-AU"),
+			monthName: getTodaysMonthName("en-AU"),
 			year: new Date().getFullYear(),
 		};
 		return today;
@@ -53,10 +56,6 @@ const DatesProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const [dateInView, setDateInView] = React.useState<DateProps>(loadTodaysDate);
 
 	const toPass = { dateInView, setDateInView, loadTodaysDate };
-
-	// React.useEffect(() => {
-	// 	loadTodaysDate();
-	// }, []);
 
 	return <DatesContext.Provider value={toPass}>{children}</DatesContext.Provider>;
 };

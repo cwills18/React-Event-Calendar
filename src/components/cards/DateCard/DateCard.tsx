@@ -1,15 +1,16 @@
 import React from "react";
 import styles from "./_DateCard.module.scss";
 
-type DateCardProps = {
+interface DateCardProps {
 	date: string;
 	thisMonth: boolean;
-};
+	handleClick: () => void;
+}
 
-const DateCard: React.FC<DateCardProps> = ({ date, thisMonth }) => {
+const DateCard: React.FC<DateCardProps> = ({ date, thisMonth, handleClick }) => {
 	return (
 		<>
-			<div className={styles.Card}>
+			<div className={styles.Card} onClick={handleClick}>
 				<p className={styles.Number} style={{ color: thisMonth ? "black" : "grey" }}>
 					{date}
 				</p>
