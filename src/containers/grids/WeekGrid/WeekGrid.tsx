@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import { DatesContext } from "../../../contexts/DatesProvider";
-import { formatMMYYYY, monthlyViewDates } from "../../../services/dates";
+import { formatMMYYYY, returnSundayDate, weekViewDates } from "../../../services/dates";
 import DateCard from "../../../components/cards/DateCard/DateCard";
-import styles from "./_MonthGrid.module.scss";
+import styles from "./_WeekGrid.module.scss";
 import { Modal } from "../../../components/Modal/Modal";
 import useModal from "../../../custom-hooks/useModal";
 
-const MonthGrid: React.FC = ({}) => {
+const WeekGrid: React.FC = ({}) => {
 	const { dateInView } = React.useContext(DatesContext);
 	const [shownDates, setShownDates] = React.useState<any[] | undefined>(undefined);
 	const { isShown, toggle } = useModal();
 
 	useEffect(() => {
 		if (dateInView) {
-			const formattedDate = formatMMYYYY(dateInView.monthNum, dateInView.year);
-			const dates = monthlyViewDates(formattedDate);
+			const sundayDate = returnSundayDate(dateInView);
+			const dates = weekViewDates(sundayDate);
 			setShownDates(dates);
 		}
 	}, [dateInView]);
@@ -37,7 +37,7 @@ const MonthGrid: React.FC = ({}) => {
 					shownDates.map((date) => {
 						return (
 							<DateCard
-								key={`${date.date} ${date.thisMonth}`}
+								key={`week view ${date.date} ${date.monthName}`}
 								date={date.date}
 								thisMonth={date.thisMonth}
 								handleClick={toggle}
@@ -49,4 +49,4 @@ const MonthGrid: React.FC = ({}) => {
 	);
 };
 
-export default MonthGrid;
+export default WeekGrid;

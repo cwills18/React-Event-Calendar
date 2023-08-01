@@ -4,7 +4,7 @@
 	&__Dates {
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
-		grid-template-rows: repeat(6, calc(100vh * 0.13));
+		grid-template-rows: calc(0.75 * 100vh);
 	}
 }
 

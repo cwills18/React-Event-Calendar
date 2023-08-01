@@ -1,6 +1,7 @@
 import DatesProvider from "./contexts/DatesProvider";
 import Page from "./containers/Page/Page";
 import "./_main.scss";
+import ViewProvider from "./contexts/ViewProvider";
 
 /* Planning
 
@@ -41,9 +42,11 @@ So that easy to handle logic for switching views (later)
 function App() {
 	return (
 		<>
-			<DatesProvider>
-				<Page />
-			</DatesProvider>
+			<ViewProvider>
+				<DatesProvider>
+					<Page />
+				</DatesProvider>
+			</ViewProvider>
 		</>
 	);
 }
